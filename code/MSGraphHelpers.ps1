@@ -268,3 +268,83 @@ function Add-AzureADGroupMembersGraph{
 # gets all users from Groups that Match a string
 $AllUsersFromGroups =  Get-AzureADGroupsMembershipsGraph -Groups "AAD_"
 
+
+function Get-FancyHeader {
+    [CmdletBinding()]
+    param (
+        $accesToken,
+        $encoding ='gzip, deflate, br',
+        $contentType = 'applicaiton/json'
+        
+    )
+    return @{
+        'Authorization' = 'Bearer ' + $accesToken;
+        'X-Requested-With'= 'XMLHttpRequest';
+        'x-ms-client-request-id'= [guid]::NewGuid();
+        'x-ms-correlation-id' = [guid]::NewGuid();
+        'accept-encoding' = $encoding;
+        'content-type' = $contentType
+    };
+}
+
+
+Function Grant-OAuth2PermissionsToApp{
+    Param(
+        [Parameter(Mandatory=$true)]$Username, #global administrator username
+        [Parameter(Mandatory=$true)]$Password, #global administrator password
+        [Parameter(Mandatory=$true)]$azureAppId #application ID of the azure application you wish to admin-consent to
+    )
+    $azureAppId = "53679879-5bbf-4a31-9f7f-911e0e49a9a8"
+    $secpasswd = ConvertTo-SecureString $Password -AsPlainText -Force
+    $mycreds = New-Object System.Management.Automation.PSCredential ($Username, $secpasswd)
+    $res = login-azurermaccount -Credential $mycreds
+    #-Credential $mycreds
+    $context = Get-AzureRmContext
+    $tenantId = $context.Tenant.Id
+    $refreshToken = $context.TokenCache.ReadItems()[-1].RefreshToken
+    $body = "grant_type=refresh_token&resource=74658136-14ec-4630-ad9b-26e160ff0fc6&refresh_token=$($refreshToken)"
+    $apiToken = Invoke-RestMethod "https://login.windows.net/$tenantId/oauth2/token" -Method POST -Body $body -ContentType 'application/x-www-form-urlencoded'
+    
+    $header = @{
+    'Authorization' = 'Bearer ' + $apiToken.access_token;
+    'X-Requested-With'= 'XMLHttpRequest';
+    'x-ms-client-request-id'= [guid]::NewGuid();
+    'x-ms-correlation-id' = [guid]::NewGuid()
+
+    }
+    $url = "https://main.iam.ad.ext.azure.com/api/RegisteredApplications/$($azureAppId)/Consent?onBehalfOfAll=true"
+    invoke-RestMethod –Uri $url –Headers $header –Method POST -ErrorAction Stop
+    # Invoke-RestMethod –Uri $url –Headers $header –Method GET -ErrorAction Stop
+}
+
+
+    $clientId = "53679879-5bbf-4a31-9f7f-911e0e49a9a8" # custom app
+    [uri]$redirectUri = "urn:ietf:wg:oauth:2.0:oob"
+    $MSGraphURI = "https://main.iam.ad.ext.azure.com" # "https://management.core.windows.net/"
+    $prompt = [Microsoft.IdentityModel.Clients.ActiveDirectory.PromptBehavior]::Always;
+    $authority = "https://login.microsoftonline.com/$($Global:tenantId)"
+    $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority
+    $authResult = $authContext.AcquireToken($MSGraphURI, $clientId, $redirectUri, $prompt)
+    $token = $authResult.AccessToken
+
+    $endpoint = "https://main.iam.ad.ext.azure.com/api/Policies/Policies?top=10&nextLink=null&appId=&includeBaseline=true"
+
+    $test =Invoke-RestMethod -Uri $endpoint -Headers $header
+
+    $metadata = "https://main.iam.ad.ext.azure.com/api/Policies/Policies?top=100&appId=&includeBaseline=true&nextLink=null";
+    $test2  =Invoke-RestMethod -Uri $metadata -Headers $header 
+    $chooseApps = "https://main.iam.ad.ext.azure.com/api/ChooseApplications/ById"
+    
+    $header = @{
+        'Authorization' = 'Bearer ' + $apiToken.access_token;
+        'X-Requested-With'= 'XMLHttpRequest';
+        'x-ms-client-request-id'= [guid]::NewGuid();
+        'x-ms-correlation-id' = [guid]::NewGuid();
+        'accept-encoding' = 'gzip, deflate, br';
+        'content-type' = 'application/json'
+        
+    }
+    $exchangePayload = '{"ids":["00000002-0000-0ff1-ce00-000000000000"]}';
+    $payload = "{`"ids`":[`"$($appId)`"]}";
+    $test3  =Invoke-RestMethod -Uri $chooseApps -Headers $header -Method post -Body $payload 
+    
