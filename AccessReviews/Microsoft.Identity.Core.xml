@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Identity.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Identity.Core.Cache.AdalResult">
+            <summary>
+            Contains the results of one token acquisition operation. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalResult.#ctor(System.String,System.String,System.DateTimeOffset)">
+            <summary>
+            Creates result returned from AcquireToken. Except in advanced scenarios related to token caching, you do not need to create any instance of AuthenticationResult.
+            </summary>
+            <param name="accessTokenType">Type of the Access Token returned</param>
+            <param name="accessToken">The Access Token requested</param>
+            <param name="expiresOn">The point in time in which the Access Token returned in the AccessToken property ceases to be valid</param>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalResult.#ctor(System.String,System.String,System.DateTimeOffset,System.DateTimeOffset)">
+            <summary>
+            Creates result returned from AcquireToken. Except in advanced scenarios related to token caching, you do not need to create any instance of AuthenticationResult.
+            </summary>
+            <param name="accessTokenType">Type of the Access Token returned</param>
+            <param name="accessToken">The Access Token requested</param>
+            <param name="expiresOn">The point in time in which the Access Token returned in the AccessToken property ceases to be valid</param>
+            <param name="extendedExpiresOn">The point in time in which the Access Token returned in the AccessToken property ceases to be valid</param>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.AccessTokenType">
+            <summary>
+            Gets the type of the Access Token returned. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.AccessToken">
+            <summary>
+            Gets the Access Token requested.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.ExpiresOn">
+            <summary>
+            Gets the point in time in which the Access Token returned in the AccessToken property ceases to be valid.
+            This value is calculated based on current UTC time measured locally and the value expiresIn received from the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.ExtendedExpiresOn">
+            <summary>
+            Gets the point in time in which the Access Token returned in the AccessToken property ceases to be valid in ADAL's extended LifeTime.
+            This value is calculated based on current UTC time measured locally and the value ext_expiresIn received from the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.ExtendedLifeTimeToken">
+            <summary>
+            Gives information to the developer whether token returned is during normal or extended lifetime.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.TenantId">
+            <summary>
+            Gets an identifier for the tenant the token was acquired from. This property will be null if tenant information is not returned by the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.UserInfo">
+            <summary>
+            Gets user information including user Id. Some elements in UserInfo might be null if not returned by the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.IdToken">
+            <summary>
+            Gets the entire Id Token if returned by the service or null if no Id Token is returned.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResult.Authority">
+            <summary>
+            Gets the authority that has issued the token.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalResult.CreateAuthorizationHeader">
+            <summary>
+            Creates authorization header from authentication result.
+            </summary>
+            <returns>Created authorization header</returns>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResultWrapper.RefreshToken">
+            <summary>
+            Gets the Refresh Token associated with the requested Access Token. Note: not all operations will return a Refresh Token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalResultWrapper.IsMultipleResourceRefreshToken">
+            <summary>
+            Gets a value indicating whether the refresh token can be used for requesting access token for other resources.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalResultWrapper.Deserialize(System.String)">
+            <summary>
+            Serializes the object to a JSON string
+            </summary>
+            <returns>Deserialized authentication result</returns>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalResultWrapper.Serialize">
+            <summary>
+            Serializes the object to a JSON string
+            </summary>
+            <returns>Serialized authentication result</returns>
+        </member>
+        <member name="T:Microsoft.Identity.Core.Cache.TokenSubjectType">
+            <summary>
+            Determines what type of subject the token was issued for.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.Cache.TokenSubjectType.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.Cache.TokenSubjectType.Client">
+            <summary>
+            Client
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.Cache.TokenSubjectType.UserPlusClient">
+            <summary>
+            UserPlusClient: This is for confidential clients used in middle tier.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Identity.Core.Cache.AdalTokenCacheKey">
+            <summary>
+            <see cref="T:Microsoft.Identity.Core.Cache.AdalTokenCacheKey"/> can be used with Linq to access items from the TokenCache dictionary.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalTokenCacheKey.Equals(System.Object)">
+            <summary>
+            Determines whether the specified object is equal to the current object.
+            </summary>
+            <returns>
+            true if the specified object is equal to the current object; otherwise, false.
+            </returns>
+            <param name="obj">The object to compare with the current object. </param><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalTokenCacheKey.Equals(Microsoft.Identity.Core.Cache.AdalTokenCacheKey)">
+            <summary>
+            Determines whether the specified TokenCacheKey is equal to the current object.
+            </summary>
+            <returns>
+            true if the specified TokenCacheKey is equal to the current object; otherwise, false.
+            </returns>
+            <param name="other">The TokenCacheKey to compare with the current object. </param><filterpriority>2</filterpriority>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalTokenCacheKey.GetHashCode">
+            <summary>
+            Returns the hash code for this TokenCacheKey.
+            </summary>
+            <returns>
+            A 32-bit signed integer hash code.
+            </returns>
+        </member>
+        <member name="T:Microsoft.Identity.Core.Cache.AdalUserInfo">
+            <summary>
+            Contains information of a single user. This information is used for token cache lookup. Also if created with userId, userId is sent to the service when login_hint is accepted.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalUserInfo.#ctor">
+            <summary>
+            Create user information for token cache lookup
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.Cache.AdalUserInfo.#ctor(Microsoft.Identity.Core.Cache.AdalUserInfo)">
+            <summary>
+            Create user information copied from another UserInfo object
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.UniqueId">
+            <summary>
+            Gets identifier of the user authenticated during token acquisition. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.DisplayableId">
+            <summary>
+            Gets a displayable value in UserPrincipalName (UPN) format. The value can be null.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.GivenName">
+            <summary>
+            Gets given name of the user if provided by the service. If not, the value is null. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.FamilyName">
+            <summary>
+            Gets family name of the user if provided by the service. If not, the value is null. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.PasswordExpiresOn">
+            <summary>
+            Gets the time when the password expires. Default value is 0.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.PasswordChangeUrl">
+            <summary>
+            Gets the url where the user can change the expiring password. The value can be null.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.Cache.AdalUserInfo.IdentityProvider">
+            <summary>
+            Gets identity provider if returned by the service. If not, the value is null. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.Identity.Core.CoreErrorCodes">
+            <summary>
+            Error codes attached to each exception.
+            These need to be duplicated and publicly exposed in the MSAL and ADAL because users refer to them
+            </summary>
+        </member>
+        <member name="T:Microsoft.Identity.Core.CoreExceptionFactory">
+            <summary>
+            Abstract factory for spewing exceptions for Adal and Msal. Use the <see cref="P:Microsoft.Identity.Core.CoreExceptionFactory.Instance"/>
+            singleton to access an actual implementation which will have been injected.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.ExceptionDetail.StatusCode">
+            <summary>
+            Gets the status code returned from http layer. This status code is either the HttpStatusCode in the inner
+            HttpRequestException response or
+            NavigateError Event Status Code in browser based flow (See
+            http://msdn.microsoft.com/en-us/library/bb268233(v=vs.85).aspx).
+            You can use this code for purposes such as implementing retry logic or error investigation.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.ExceptionDetail.ServiceErrorCodes">
+            <summary>
+            The specific error codes that may be returned by the service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Core.ExceptionDetail.ResponseBody">
+            <summary>
+            Raw response body received from the server.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.MsalIdParameter.Product">
+            <summary>
+            MSAL Flavor: .NET or WinRT
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.MsalIdParameter.Version">
+            <summary>
+            MSAL assembly version
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.MsalIdParameter.CpuPlatform">
+            <summary>
+            CPU platform with x86, x64 or ARM as value
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.MsalIdParameter.OS">
+            <summary>
+            Version of the operating system. This will not be sent on WinRT
+            </summary>
+        </member>
+        <member name="F:Microsoft.Identity.Core.MsalIdParameter.DeviceModel">
+            <summary>
+            Device model. This will not be sent on .NET
+            </summary>
+        </member>
+        <member name="T:Microsoft.Identity.Core.MsalIdHelper">
+            <summary>
+            This class adds additional query parameters or headers to the requests sent to STS. This can help us in
+            collecting statistics and potentially on diagnostics.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Identity.Core.UI.CoreUIParent.#ctor(System.Object)">
+            <summary>
+            Initializes an instance for a provided parent window.
+            </summary>
+            <param name="ownerWindow">Parent window object reference. OPTIONAL.</param>
+        </member>
+    </members>
+</doc>
